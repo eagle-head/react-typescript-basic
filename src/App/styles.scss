@@ -1,0 +1,24 @@
+$bg-color: #333333;
+$font-color: #cccccc;
+
+html {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+}
+
+body {
+  background: $bg-color;
+}
+
+.title {
+  font-weight: 500;
+  color: $font-color;
+
+  &:hover {
+    color: cornflowerblue;
+  }
+}
+
+img {
+  max-width: 200px;
+}

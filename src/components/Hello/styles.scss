@@ -1,0 +1,12 @@
+.title {
+  font-weight: 500;
+  color: brown;
+
+  &:hover {
+    color: cornflowerblue;
+  }
+
+  &__tertiary {
+    color: aqua;
+  }
+}

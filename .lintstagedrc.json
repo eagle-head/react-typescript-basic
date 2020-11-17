@@ -1,0 +1,7 @@
+{
+  "src/**/*.ts?(x)": [
+    "prettier --write",
+    "eslint --cache --fix",
+    "jest --bail --findRelatedTests"
+  ]
+}

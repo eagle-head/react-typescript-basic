@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "ESNext",
+    "lib": ["es2015", "es6", "es2017", "dom", "esnext", "scripthost"],
+    "allowJs": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "baseUrl": "types",
+    "outDir": "./build",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types", "src/typings"],
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules", "build"],
+  "include": ["**/*.ts", "**/*.tsx"]
+}
