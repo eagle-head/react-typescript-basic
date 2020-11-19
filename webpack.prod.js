@@ -23,7 +23,7 @@ module.exports = (function (env, argv) {
     output: {
       path: path.resolve(__dirname, "build"),
       publicPath: "/",
-      filename: "static/js/[name]~[hash:16].js",
+      filename: "static/js/[name]~[contenthash:16].js",
     },
 
     resolve: {
@@ -91,8 +91,8 @@ module.exports = (function (env, argv) {
         ),
       }),
       new MiniCssExtractPlugin({
-        filename: "static/css/[name]~[hash:16].css",
-        chunkFilename: "static/css/[id]~[hash:16].css",
+        filename: "static/css/[name]~[contenthash:16].css",
+        chunkFilename: "static/css/[id]~[contenthash:16].css",
         ignoreOrder: true,
       }),
       new FaviconsWebpackPlugin({
@@ -182,7 +182,7 @@ module.exports = (function (env, argv) {
             {
               loader: "file-loader",
               options: {
-                name: "[name]~[hash:16].[ext]",
+                name: "[name]~[contenthash:16].[ext]",
                 outputPath: "static/images/",
               },
             },
