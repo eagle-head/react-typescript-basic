@@ -1,10 +1,4 @@
-# See this article for reference: https://help.github.com/articles/dealing-with-line-endings/
-# Refreshing repo after line ending change:
-# https://help.github.com/articles/dealing-with-line-endings/#refreshing-a-repository-after-changing-line-endings
-
-# Handle line endings automatically for files detected as text
-# and leave all files detected as binary untouched.
-* text=auto
+* text=lf
 
 # The above will handle all files NOT found below
 #
@@ -13,19 +7,13 @@
 .editorconfig   text    eol=lf
 .gitignore      text    eol=lf
 *.css           text    eol=lf
-*.df            text    eol=lf
 *.htm           text    eol=lf
 *.html          text    eol=lf
-*.java          text    eol=lf
 *.js            text    eol=lf
 *.json          text    eol=lf
-*.jsp           text    eol=lf
-*.jspf          text    eol=lf
 *.md            text    eol=lf
-*.properties    text    eol=lf
 *.scss          text    eol=lf
 *.sh            text    eol=lf
-*.tld           text    eol=lf
 *.ts            text    eol=lf
 *.txt           text    eol=lf
 *.xml           text    eol=lf
