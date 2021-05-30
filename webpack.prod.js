@@ -3,14 +3,15 @@ const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const dotenv = require("dotenv").config({
+  path: `${__dirname}/.env.production`,
+});
 
-// eslint-disable-next-line
-module.exports = (function (env, argv) {
+module.exports = (function () {
   return {
     context: path.resolve(__dirname, "./"),
 
@@ -36,7 +37,7 @@ module.exports = (function (env, argv) {
 
     optimization: {
       minimize: true,
-      moduleIds: "hashed",
+      moduleIds: "deterministic",
       runtimeChunk: {
         name: "runtime",
       },
@@ -54,27 +55,27 @@ module.exports = (function (env, argv) {
       minimizer: [
         new TerserPlugin({
           test: /\.js(\?.*)?$/i,
-          cache: true,
           parallel: 4,
           extractComments: true,
-        }),
-        new OptimizeCssAssetsPlugin({
-          assetNameRegExp: /\.optimize\.css$/g,
-          cssProcessor: require("cssnano"),
-          cssProcessorPluginOptions: {
-            preset: ["default", { discardComments: { removeAll: true } }],
+          terserOptions: {
+            output: {
+              comments: /@license/i,
+            },
           },
-          canPrint: true,
         }),
+        new CssMinimizerPlugin(),
       ],
     },
 
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.ProgressPlugin(),
-      new webpack.WatchIgnorePlugin([path.resolve(__dirname, "node_modules")]),
+      new webpack.WatchIgnorePlugin({ paths: ["./node_modules"] }),
       new CopyPlugin({
-        patterns: [{ from: "./public/robots.txt", to: "./" }],
+        patterns: [
+          { from: "./public/robots.txt", to: "./" },
+          { from: "./public/favicon.ico", to: "./" },
+        ],
       }),
       new ForkTsCheckerWebpackPlugin({
         eslint: {
@@ -89,44 +90,15 @@ module.exports = (function (env, argv) {
           "templates",
           "index.template.html"
         ),
+        favicon: "./public/favicon.ico",
       }),
       new MiniCssExtractPlugin({
         filename: "static/css/[name]~[contenthash:16].css",
         chunkFilename: "static/css/[id]~[contenthash:16].css",
         ignoreOrder: true,
       }),
-      new FaviconsWebpackPlugin({
-        logo: path.resolve(__dirname, "assets", "icons", "favicon.png"),
-        cache: "./.cache",
-        prefix: "static/images/",
-        favicons: {
-          appName: "",
-          appShortName: "",
-          appDescription: "",
-          developerName: "",
-          developerURL: "",
-          dir: "auto",
-          lang: "pt-BR",
-          background: "#AAA",
-          theme_color: "#BBB",
-          display: "standalone",
-          appleStatusBarStyle: "black-translucent",
-          orientation: "portrait",
-          start_url: "./?utm_source=homescreen",
-          scope: ".",
-          version: "0.0.1",
-          logging: false,
-          icons: {
-            favicons: true,
-            android: false,
-            appleIcon: false,
-            appleStartup: false,
-            coast: false,
-            firefox: false,
-            windows: false,
-            yandex: false,
-          },
-        },
+      new webpack.DefinePlugin({
+        "process.env": JSON.stringify(dotenv.parse),
       }),
     ],
 
@@ -148,30 +120,12 @@ module.exports = (function (env, argv) {
           },
         },
         {
-          test: /\.s[ac]ss$/i,
+          test: /\.(sa|sc|c)ss$/,
           exclude: /node_modules/,
           use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-              options: {
-                esModule: true,
-              },
-            },
-            {
-              loader: "css-loader",
-              options: {
-                esModule: true,
-                modules: {
-                  compileType: "module",
-                  localIdentName: "rebel__[hash:base64:8]",
-                  localIdentContext: path.resolve(__dirname, "src"),
-                },
-              },
-            },
-            {
-              loader: "postcss-loader",
-            },
-            "resolve-url-loader",
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            "postcss-loader",
             "sass-loader",
           ],
         },
@@ -190,9 +144,6 @@ module.exports = (function (env, argv) {
         },
         {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-          issuer: {
-            test: /\.tsx?$/,
-          },
           use: ["babel-loader", "@svgr/webpack", "url-loader"],
         },
         {

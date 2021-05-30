@@ -1,12 +1,13 @@
 import React, { FunctionComponent, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import classes from "./styles.scss";
 import { Props } from "./interface";
 import Logo from "../assets/images/react.png";
 import { ErrorBoundary } from "../pages/ErrorBoundary";
 import { LoginForm } from "../components/LoginForm";
 import { Hello } from "../components/Hello";
+import "./styles.scss";
+
 const Home = lazy(() =>
   import("../pages/Home").then(({ Home }) => ({
     default: Home,
@@ -27,7 +28,7 @@ export const App: FunctionComponent<Props> = ({ name }: Props) => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<h1>Loading ...</h1>}>
-        <h1 className={classes.title}>Hello, {name} ☀️</h1>
+        <h1 className="bg-title">Hello, {name} ☀️</h1>
         <img src={Logo} />
         <Hello />
         <div>

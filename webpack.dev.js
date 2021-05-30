@@ -2,14 +2,12 @@ const path = require("path");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const dotenv = require("dotenv").config({
   path: `${__dirname}/.env.development`,
 });
 
-// eslint-disable-next-line
-module.exports = (function (env, argv) {
+module.exports = (function () {
   return {
     context: path.resolve(__dirname, "./"),
 
@@ -63,22 +61,8 @@ module.exports = (function (env, argv) {
           },
         },
         {
-          test: /\.s[ac]ss$/i,
-          use: [
-            "style-loader",
-            {
-              loader: "css-loader",
-              options: {
-                modules: {
-                  compileType: "module",
-                  localIdentName: "rebel__[hash:base64:8]",
-                  localIdentContext: path.resolve(__dirname, "src"),
-                },
-              },
-            },
-            "resolve-url-loader",
-            "sass-loader",
-          ],
+          test: /\.(sa|sc|c)ss$/,
+          use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
         },
         {
           test: /\.(png|jpe?g|gif)$/i,
@@ -94,9 +78,6 @@ module.exports = (function (env, argv) {
         },
         {
           test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-          issuer: {
-            test: /\.tsx?$/,
-          },
           use: ["babel-loader", "@svgr/webpack", "url-loader"],
         },
         {
@@ -108,10 +89,17 @@ module.exports = (function (env, argv) {
 
     plugins: [
       new webpack.ProgressPlugin(),
+      new webpack.AutomaticPrefetchPlugin(),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.WatchIgnorePlugin([path.resolve(__dirname, "node_modules")]),
+      new webpack.WatchIgnorePlugin({ paths: ["./node_modules"] }),
       new CopyPlugin({
-        patterns: [{ from: "./public/robots.txt", to: "build" }],
+        patterns: [
+          { from: path.resolve(__dirname, "./public/robots.txt"), to: "build" },
+          {
+            from: path.resolve(__dirname, "./public/favicon.ico"),
+            to: "build",
+          },
+        ],
       }),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify(dotenv.parse),
@@ -129,39 +117,6 @@ module.exports = (function (env, argv) {
           "templates",
           "index.template.html"
         ),
-      }),
-      new FaviconsWebpackPlugin({
-        logo: path.resolve(__dirname, "assets", "icons", "favicon.png"),
-        cache: "./.cache",
-        prefix: "static/images/",
-        favicons: {
-          appName: "",
-          appShortName: "",
-          appDescription: "",
-          developerName: "",
-          developerURL: "",
-          dir: "auto",
-          lang: "pt-BR",
-          background: "#AAA",
-          theme_color: "#BBB",
-          display: "standalone",
-          appleStatusBarStyle: "black-translucent",
-          orientation: "portrait",
-          start_url: "./?utm_source=homescreen",
-          scope: ".",
-          version: "0.0.1",
-          logging: false,
-          icons: {
-            favicons: true,
-            android: false,
-            appleIcon: false,
-            appleStartup: false,
-            coast: false,
-            firefox: false,
-            windows: false,
-            yandex: false,
-          },
-        },
       }),
     ],
 

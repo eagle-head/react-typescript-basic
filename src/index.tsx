@@ -2,7 +2,4 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { App } from "./App";
 
-ReactDOM.render(
-  <App name="Eduardo" />,
-  document.getElementById("root") as HTMLElement
-);
+ReactDOM.render(<App name="Eduardo" />, document.getElementById("root"));

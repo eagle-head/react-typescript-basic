@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "commonjs": true,
@@ -9,7 +10,6 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
     "plugin:testing-library/react",
     "plugin:jest-dom/recommended"
@@ -31,9 +31,10 @@
     "jest-dom"
   ],
   "rules": {
+    "no-console": 2,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/prop-types": "off",
+    // "react/prop-types": "off",
     "testing-library/await-async-query": "error",
     "testing-library/no-await-sync-query": "error",
     "testing-library/no-debug": "warn",
@@ -52,7 +53,7 @@
       }
     }
   ],
-  "ignorePatterns": ["node_modules/*", "build/*"],
+  "ignorePatterns": ["node_modules/**/*", "build/**/*"],
   "settings": {
     "react": {
       "pragma": "React",
