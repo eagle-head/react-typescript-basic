@@ -12,10 +12,6 @@
         "regenerator": true
       }
     ],
-    ["@babel/plugin-transform-typescript"],
-    ["@babel/plugin-transform-arrow-functions", { "spec": true }],
-    ["@babel/plugin-proposal-optional-chaining"],
-    ["@babel/plugin-syntax-dynamic-import"],
-    ["@babel/plugin-syntax-typescript"]
+    ["@babel/plugin-syntax-dynamic-import"]
   ]
 }
