@@ -28,7 +28,7 @@ module.exports = (function () {
     },
 
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".json"],
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
       alias: {
         "react-dom$": "react-dom/profiling",
         "scheduler/tracing": "scheduler/tracing-profiling",
@@ -70,12 +70,8 @@ module.exports = (function () {
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.ProgressPlugin(),
-      new webpack.WatchIgnorePlugin({ paths: ["./node_modules"] }),
       new CopyPlugin({
-        patterns: [
-          { from: "./public/robots.txt", to: "./" },
-          { from: "./public/favicon.ico", to: "./" },
-        ],
+        patterns: [{ from: "./assets/robots.txt", to: "./" }],
       }),
       new ForkTsCheckerWebpackPlugin({
         eslint: {
@@ -83,14 +79,14 @@ module.exports = (function () {
         },
       }),
       new HtmlWebpackPlugin({
-        title: "TypeScript React",
+        title: process.env.PAGE_TITLE,
         template: path.resolve(
           __dirname,
           "assets",
           "templates",
           "index.template.html"
         ),
-        favicon: "./public/favicon.ico",
+        favicon: "./assets/icons/favicon.ico",
       }),
       new MiniCssExtractPlugin({
         filename: "static/css/[name]~[contenthash:16].css",
@@ -125,7 +121,14 @@ module.exports = (function () {
           use: [
             MiniCssExtractPlugin.loader,
             "css-loader",
-            "postcss-loader",
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  plugins: ["postcss-preset-env"],
+                },
+              },
+            },
             "sass-loader",
           ],
         },

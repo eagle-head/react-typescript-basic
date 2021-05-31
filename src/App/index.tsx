@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Suspense, lazy } from "react";
+import React, { FC, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import { Props } from "./interface";
@@ -24,7 +24,7 @@ function noop(): void {
   return;
 }
 
-export const App: FunctionComponent<Props> = ({ name }: Props) => {
+const App: FC<Props> = ({ name }: Props) => {
   return (
     <ErrorBoundary>
       <Suspense fallback={<h1>Loading ...</h1>}>
@@ -56,3 +56,5 @@ export const App: FunctionComponent<Props> = ({ name }: Props) => {
     </ErrorBoundary>
   );
 };
+
+export default App;

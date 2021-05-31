@@ -24,7 +24,7 @@ module.exports = (function () {
     },
 
     resolve: {
-      extensions: [".ts", ".tsx", ".js", ".json"],
+      extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     },
 
     devtool: "eval-source-map",
@@ -62,7 +62,20 @@ module.exports = (function () {
         },
         {
           test: /\.(sa|sc|c)ss$/,
-          use: ["style-loader", "css-loader", "postcss-loader", "sass-loader"],
+          use: [
+            "style-loader",
+            { loader: "css-loader", options: { sourceMap: true } },
+            {
+              loader: "postcss-loader",
+              options: {
+                sourceMap: true,
+                postcssOptions: {
+                  plugins: ["postcss-preset-env"],
+                },
+              },
+            },
+            { loader: "sass-loader", options: { sourceMap: true } },
+          ],
         },
         {
           test: /\.(png|jpe?g|gif)$/i,
@@ -91,15 +104,9 @@ module.exports = (function () {
       new webpack.ProgressPlugin(),
       new webpack.AutomaticPrefetchPlugin(),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.WatchIgnorePlugin({ paths: ["./node_modules"] }),
+      new webpack.WatchIgnorePlugin({ paths: [/node_modules/] }),
       new CopyPlugin({
-        patterns: [
-          { from: path.resolve(__dirname, "./public/robots.txt"), to: "build" },
-          {
-            from: path.resolve(__dirname, "./public/favicon.ico"),
-            to: "build",
-          },
-        ],
+        patterns: [{ from: "./assets/robots.txt", to: "build" }],
       }),
       new webpack.DefinePlugin({
         "process.env": JSON.stringify(dotenv.parse),
@@ -110,13 +117,14 @@ module.exports = (function () {
         },
       }),
       new HtmlWebpackPlugin({
-        title: "TypeScript React",
+        title: process.env.PAGE_TITLE,
         template: path.resolve(
           __dirname,
           "assets",
           "templates",
           "index.template.html"
         ),
+        favicon: "./assets/icons/favicon.ico",
       }),
     ],
 
